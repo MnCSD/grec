@@ -3,6 +3,7 @@
 import { Lobster } from "next/font/google";
 import React, { useState } from "react";
 import { menu } from "../dishes-en";
+import { drinksMenu } from "../drinks-en";
 
 const lobster = Lobster({
   weight: "400",
@@ -31,10 +32,10 @@ export const MenuSection = () => {
         >
           {/* Front Side */}
           <div className="backface-hidden">
-            <div className="grid grid-cols-2 gap-10 py-16 px-20 w-full bg-white/40 rounded-sm backdrop-blur-sm relative">
+            <div className="columns-2 gap-x-12 py-16 px-20 w-full bg-white/40 rounded-sm backdrop-blur-sm relative h-[1800px] overflow-y-auto">
               {menu.map((dish) => (
-                <div key={dish.title} className="flex flex-col">
-                  <div className="mb-6">
+                <div key={dish.title} className="break-inside-avoid mb-8">
+                  <div className="mb-4">
                     <h2
                       className={`text-3xl font-bold text-logo capitalize ${lobster.className}`}
                     >
@@ -43,27 +44,23 @@ export const MenuSection = () => {
                     <div className="w-24 h-1 bg-brick mt-3 rounded-full"></div>
                   </div>
 
-                  <div className="flex flex-col">
-                    {dish.items.map((item, itemIndex) => (
+                  <div className="flex flex-col space-y-2">
+                    {dish.items.map((item) => (
                       <div
                         key={item.name}
-                        className={`flex items-start justify-between gap-4 py-3 ${
-                          itemIndex !== dish.items.length - 1
-                            ? "border-b border-wood-light/30"
-                            : ""
-                        }`}
+                        className="flex items-start justify-between gap-4"
                       >
                         <div className="flex flex-col flex-1">
-                          <span className="text-wood-dark font-bold text-medium mb-0.5">
+                          <span className="text-wood-dark font-semibold text-base leading-tight">
                             {item.name}
                           </span>
                           {item.description && (
-                            <span className="text-wood-dark/80 font-light text-sm leading-relaxed">
+                            <span className="text-wood-dark/70 font-light text-sm leading-snug">
                               {item.description}
                             </span>
                           )}
                         </div>
-                        <span className="text-brick font-bold text-medium whitespace-nowrap mt-0.5">
+                        <span className="text-wood-dark font-bold text-base whitespace-nowrap">
                           {item.price}
                         </span>
                       </div>
@@ -93,22 +90,44 @@ export const MenuSection = () => {
             </div>
           </div>
 
-          {/* Back Side */}
+          {/* Back Side - Drinks Menu */}
           <div className="absolute top-0 left-0 w-full backface-hidden [transform:rotateY(180deg)]">
-            <div className="grid grid-cols-2 gap-10 py-16 px-20 w-full bg-white/40 rounded-sm backdrop-blur-sm relative">
-              <div className="col-span-2 text-center">
-                <h2
-                  className={`text-5xl font-bold text-logo capitalize mb-8 ${lobster.className}`}
-                >
-                  About Our Menu
-                </h2>
-                <p className="text-wood-dark text-lg leading-relaxed max-w-4xl mx-auto">
-                  All our dishes are prepared with authentic Greek recipes,
-                  using fresh ingredients sourced locally and from Greece. We
-                  pride ourselves on bringing traditional flavors to your table
-                  with a modern touch.
-                </p>
-              </div>
+            <div className="columns-2 gap-x-12 py-16 px-20 w-full bg-white/40 rounded-sm backdrop-blur-sm relative h-[1800px] overflow-y-auto">
+              {drinksMenu.map((drink) => (
+                <div key={drink.title} className="break-inside-avoid mb-8">
+                  <div className="mb-4">
+                    <h2
+                      className={`text-3xl font-bold text-logo capitalize ${lobster.className}`}
+                    >
+                      {drink.title}
+                    </h2>
+                    <div className="w-24 h-1 bg-brick mt-3 rounded-full"></div>
+                  </div>
+
+                  <div className="flex flex-col space-y-2">
+                    {drink.items.map((item, index) => (
+                      <div
+                        key={index}
+                        className="flex items-start justify-between gap-4"
+                      >
+                        <div className="flex flex-col flex-1">
+                          <span className="text-wood-dark font-semibold text-base leading-tight">
+                            {item.name}
+                          </span>
+                          {item.description && (
+                            <span className="text-wood-dark/70 font-light text-sm leading-snug">
+                              {item.description}
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-wood-dark font-bold text-base whitespace-nowrap">
+                          {item.price}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
 
               {/* Page Curl - Back */}
               <div
