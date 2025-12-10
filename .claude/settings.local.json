@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(bun install:*)"
+      "Bash(bun install:*)",
+      "Bash(npm i:*)",
+      "WebFetch(domain:www.npmjs.com)"
     ],
     "deny": [],
     "ask": []
