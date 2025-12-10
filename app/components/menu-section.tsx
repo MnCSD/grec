@@ -75,17 +75,20 @@ export const MenuSection = () => {
               {/* Page Curl - Front */}
               <div
                 onClick={() => setIsFlipped(!isFlipped)}
-                className="absolute bottom-0 right-0 w-20 h-20 cursor-pointer group"
+                className="absolute bottom-0 right-0 w-12 h-12 cursor-pointer group overflow-hidden"
                 title="About Menu"
               >
-                <div
-                  className="absolute bottom-0 right-0 w-0 h-0 border-l-[80px] border-l-transparent border-b-[80px] border-b-brick group-hover:border-b-brick-dark transition-colors"
-                  style={{ borderBottomRightRadius: "0.125rem" }}
-                />
-                <div
-                  className="absolute bottom-0 right-0 w-0 h-0 border-l-[80px] border-l-sand border-b-[80px] border-b-transparent"
-                  style={{ borderBottomRightRadius: "0.125rem" }}
-                />
+                {/* Shadow under curl */}
+                <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[48px] border-l-transparent border-b-[48px] border-b-black/20" />
+
+                {/* Back of page (darker) */}
+                <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[45px] border-l-transparent border-b-[45px] border-b-wood-dark group-hover:border-b-wood transition-all duration-300" />
+
+                {/* Curl fold */}
+                <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[45px] border-l-sand border-b-[45px] border-b-transparent" />
+
+                {/* Highlight on curl */}
+                <div className="absolute bottom-1 right-1 w-0 h-0 border-l-[15px] border-l-white/30 border-b-[15px] border-b-transparent" />
               </div>
             </div>
           </div>
@@ -110,17 +113,20 @@ export const MenuSection = () => {
               {/* Page Curl - Back */}
               <div
                 onClick={() => setIsFlipped(!isFlipped)}
-                className="absolute bottom-0 right-0 w-20 h-20 cursor-pointer group"
+                className="absolute bottom-0 right-0 w-12 h-12 cursor-pointer group overflow-hidden"
                 title="View Menu"
               >
-                <div
-                  className="absolute bottom-0 right-0 w-0 h-0 border-l-[80px] border-l-transparent border-b-[80px] border-b-brick group-hover:border-b-brick-dark transition-colors"
-                  style={{ borderBottomRightRadius: "0.125rem" }}
-                />
-                <div
-                  className="absolute bottom-0 right-0 w-0 h-0 border-l-[80px] border-l-sand border-b-[80px] border-b-transparent"
-                  style={{ borderBottomRightRadius: "0.125rem" }}
-                />
+                {/* Shadow under curl */}
+                <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[48px] border-l-transparent border-b-[48px] border-b-black/20" />
+
+                {/* Back of page (darker) */}
+                <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[45px] border-l-transparent border-b-[45px] border-b-wood-dark group-hover:border-b-wood transition-all duration-300" />
+
+                {/* Curl fold */}
+                <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[45px] border-l-sand border-b-[45px] border-b-transparent" />
+
+                {/* Highlight on curl */}
+                <div className="absolute bottom-1 right-1 w-0 h-0 border-l-[15px] border-l-white/30 border-b-[15px] border-b-transparent" />
               </div>
             </div>
           </div>
