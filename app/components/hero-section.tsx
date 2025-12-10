@@ -1,6 +1,5 @@
-import Image from "next/image";
-import React from "react";
 import { Lobster } from "next/font/google";
+import Link from "next/link";
 
 const lobster = Lobster({
   weight: "400",
@@ -24,20 +23,23 @@ export const HeroSection = () => {
           grec
         </h1>
 
-        <button className="capitalize w-40 h-12 rounded-md border border-brick/80 flex items-center justify-center gap-x-2 transition-colors cursor-pointer relative">
+        <Link
+          href="#menu"
+          className="capitalize w-40 h-12 rounded-md border border-brick/80 flex items-center justify-center gap-x-2 transition-colors cursor-pointer relative"
+        >
           <div className="absolute flex items-center justify-center -left-12">
             <span className="w-1.5 h-1.5 rounded-full  bg-brick"></span>
             <span className="w-5 h-0.5  bg-brick"></span>
           </div>
           <div className="" />
-          <div className="absolute bg-brick py-1.5 w-[115%] rounded-sm">
+          <div className="absolute bg-brick py-1.5 w-[115%] rounded-sm flex items-center justify-center">
             view menu
           </div>
           <div className="absolute flex items-center justify-center -right-12">
             <span className="w-5 h-0.5  bg-brick"></span>
             <span className="w-1.5 h-1.5 rounded-full  bg-brick"></span>
           </div>
-        </button>
+        </Link>
       </div>
 
       <div className="flex items-center gap-x-4 justify-center px-10">
