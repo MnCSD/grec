@@ -5,6 +5,7 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { menu } from "../dishes-en";
 import { drinksMenu } from "../drinks-en";
+import { useTranslation } from "../hooks/useTranslation";
 
 const lobster = Lobster({
   weight: "400",
@@ -12,6 +13,7 @@ const lobster = Lobster({
 });
 
 export const MenuSection = () => {
+  const { t } = useTranslation();
   const [isFlipped, setIsFlipped] = useState(false);
   const [selectedImage, setSelectedImage] = useState<{
     src: string;
@@ -46,7 +48,7 @@ export const MenuSection = () => {
       <h1
         className={`text-5xl sm:text-7xl md:text-9xl lg:text-[150px] font-bold text-logo capitalize mb-8 sm:mb-12 lg:mb-16 ${lobster.className}`}
       >
-        Menu
+        {t.menu.title}
       </h1>
 
       <div className="perspective-[2000px] w-full max-w-7xl px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 relative">
@@ -106,7 +108,7 @@ export const MenuSection = () => {
                                 >
                                   <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                 </svg>
-                                <span className="hidden sm:inline">View</span>
+                                <span className="hidden sm:inline">{t.common.view}</span>
                               </span>
                             )}
                           </div>
@@ -129,7 +131,7 @@ export const MenuSection = () => {
               <div
                 onClick={() => setIsFlipped(!isFlipped)}
                 className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 w-10 h-10 sm:w-12 sm:h-12 cursor-pointer group overflow-hidden z-10"
-                title="About Menu"
+                title={t.menu.title}
               >
                 {/* Shadow under curl */}
                 <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[40px] sm:border-l-[48px] border-l-transparent border-b-[40px] sm:border-b-[48px] border-b-black/20" />
@@ -189,7 +191,7 @@ export const MenuSection = () => {
               <div
                 onClick={() => setIsFlipped(!isFlipped)}
                 className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 w-10 h-10 sm:w-12 sm:h-12 cursor-pointer group overflow-hidden z-10"
-                title="View Menu"
+                title={t.menu.title}
               >
                 {/* Shadow under curl */}
                 <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[40px] sm:border-l-[48px] border-l-transparent border-b-[40px] sm:border-b-[48px] border-b-black/20" />
@@ -241,7 +243,7 @@ export const MenuSection = () => {
                 setSelectedImage(null);
               }}
               className="absolute top-2 right-2 sm:top-4 sm:right-4 z-50 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-white/90 hover:bg-white rounded-full shadow-lg transition-all duration-200 hover:scale-110 hover:rotate-90 group cursor-pointer"
-              aria-label="Close"
+              aria-label={t.common.close}
               type="button"
             >
               <svg

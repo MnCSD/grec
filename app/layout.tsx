@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Arsenal } from "next/font/google";
 import "./globals.css";
+import { Providers } from "./providers";
 
 const arsenal = Arsenal({
   weight: ["400", "700"],
@@ -22,7 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${arsenal.variable} antialiased overflow-x-hidden`}>
-        {children}
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

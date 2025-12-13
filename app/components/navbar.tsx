@@ -4,8 +4,10 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { LanguageSelection } from "./language-selection";
+import { useTranslation } from "../hooks/useTranslation";
 
 export const Navbar = () => {
+  const { t } = useTranslation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Prevent body scroll when menu is open
@@ -72,14 +74,14 @@ export const Navbar = () => {
               href="#menu"
               className="text-olive text-xs sm:text-sm md:text-[14px] font-medium whitespace-nowrap hover:opacity-70 transition-opacity"
             >
-              Menu
+              {t.navbar.menu}
             </Link>
             <span className="text-olive font-bold opacity-30">·</span>
             <Link
               href="#about"
               className="text-olive text-xs sm:text-sm md:text-[14px] font-medium whitespace-nowrap hover:opacity-70 transition-opacity"
             >
-              About
+              {t.navbar.about}
             </Link>
           </div>
         </div>
@@ -105,7 +107,7 @@ export const Navbar = () => {
               href="#contact"
               className="text-olive text-xs sm:text-sm md:text-[14px] font-medium whitespace-nowrap hover:opacity-70 transition-opacity"
             >
-              Contact
+              {t.navbar.contact}
             </Link>
             <span className="text-olive font-bold opacity-30">·</span>
             <LanguageSelection />
@@ -158,27 +160,29 @@ export const Navbar = () => {
               onClick={handleLinkClick}
               className="text-olive text-xl font-medium py-3 border-b border-olive/20 hover:text-brick transition-colors duration-200 transform hover:translate-x-2"
             >
-              Menu
+              {t.navbar.menu}
             </Link>
             <Link
               href="#about"
               onClick={handleLinkClick}
               className="text-olive text-xl font-medium py-3 border-b border-olive/20 hover:text-brick transition-colors duration-200 transform hover:translate-x-2"
             >
-              About
+              {t.navbar.about}
             </Link>
             <Link
               href="#contact"
               onClick={handleLinkClick}
               className="text-olive text-xl font-medium py-3 border-b border-olive/20 hover:text-brick transition-colors duration-200 transform hover:translate-x-2"
             >
-              Contact
+              {t.navbar.contact}
             </Link>
           </nav>
 
           {/* Language Selection in Menu */}
           <div className="mt-8 pt-6">
-            <div className="text-olive/70 text-sm mb-3">Language</div>
+            <div className="text-olive/70 text-sm mb-3">
+              {t.navbar.language}
+            </div>
             <LanguageSelection />
           </div>
         </div>

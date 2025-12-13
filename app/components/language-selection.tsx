@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import Select, { components, StylesConfig } from "react-select";
 import "flag-icons/css/flag-icons.min.css";
+import { useLanguage } from "../contexts/language-context";
 
 interface Option {
-  value: string;
+  value: "en" | "gr";
   label: string;
   countryCode: string;
 }
@@ -115,16 +116,22 @@ const CustomSingleValue = (props: any) => {
 };
 
 export const LanguageSelection = () => {
-  const [selectedOption, setSelectedOption] = useState<Option | null>(
-    options[0]
-  );
+  const { language, setLanguage } = useLanguage();
+
+  const selectedOption = options.find((opt) => opt.value === language) || options[0];
+
+  const handleChange = (option: Option | null) => {
+    if (option) {
+      setLanguage(option.value);
+    }
+  };
 
   return (
     <div className="w-20">
       <Select<Option, false>
         instanceId="language-select"
         value={selectedOption}
-        onChange={(option) => setSelectedOption(option)}
+        onChange={handleChange}
         options={options}
         styles={customStyles}
         components={{

@@ -1,6 +1,9 @@
+"use client";
+
 import { Lobster } from "next/font/google";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslation } from "../hooks/useTranslation";
 
 const lobster = Lobster({
   weight: "400",
@@ -8,11 +11,12 @@ const lobster = Lobster({
 });
 
 export const HeroSection = () => {
+  const { t } = useTranslation();
   return (
     <div className="flex flex-col justify-center mt-10 sm:mt-16 md:mt-20 px-4 sm:px-6 md:px-10">
       <div className="flex flex-col items-center mb-6 sm:mb-8 md:mb-10">
         <h2 className="text-brick/80 font-normal text-base sm:text-lg md:text-xl lg:text-2xl italic mb-2 sm:mb-3">
-          Welcome to
+          {t.hero.welcomeTo}
         </h2>
         <h1
           className={`text-5xl sm:text-7xl md:text-9xl lg:text-[120px] xl:text-[150px] font-bold text-logo capitalize mb-6 sm:mb-8 md:mb-10 ${lobster.className}`}
@@ -29,7 +33,7 @@ export const HeroSection = () => {
             <span className="w-3 sm:w-4 md:w-5 h-0.5 bg-brick"></span>
           </div>
           <div className="absolute bg-brick py-1 sm:py-1.5 w-[115%] rounded-sm flex items-center justify-center text-white text-xs sm:text-sm font-medium">
-            view menu
+            {t.hero.viewMenu}
           </div>
           <div className="absolute flex items-center justify-center -right-6 sm:-right-8 md:-right-12">
             <span className="w-3 sm:w-4 md:w-5 h-0.5 bg-brick"></span>
