@@ -91,9 +91,9 @@ export const MenuSection = () => {
                     {dish.items.map((item) => (
                       <div
                         key={item.name}
-                        className={`flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4 ${
+                        className={`flex items-center gap-3 sm:gap-4 ${
                           item.image
-                            ? "cursor-pointer group/item hover:opacity-90 transition-all duration-200"
+                            ? "cursor-pointer group/item hover:bg-white/30 transition-all duration-200 rounded-lg p-2 -m-2"
                             : ""
                         }`}
                         onClick={() => {
@@ -107,28 +107,13 @@ export const MenuSection = () => {
                         }}
                       >
                         <div className="flex flex-col flex-1 min-w-0">
-                          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-                            <span className="text-wood-dark font-semibold text-sm sm:text-base leading-tight break-words">
+                          <div className="flex items-baseline gap-2 flex-wrap">
+                            <span className="text-wood-dark font-semibold text-sm sm:text-base leading-tight">
                               {item.name}
                             </span>
-                            {item.image && (
-                              <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 bg-brick/10 hover:bg-brick/20 border border-brick/30 rounded-full text-brick text-[9px] sm:text-[10px] font-medium transition-all duration-200 group-hover/item:scale-110 group-hover/item:shadow-sm flex-shrink-0">
-                                <svg
-                                  className="w-2.5 h-2.5 sm:w-3 sm:h-3"
-                                  fill="none"
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                                </svg>
-                                <span className="hidden sm:inline">
-                                  {t.common.view}
-                                </span>
-                              </span>
-                            )}
+                            <span className="text-wood-dark font-bold text-sm sm:text-base whitespace-nowrap">
+                              {item.price}
+                            </span>
                           </div>
                           {item.description && (
                             <span className="text-wood-dark/70 font-light text-xs sm:text-sm leading-snug mt-0.5 sm:mt-1">
@@ -136,9 +121,18 @@ export const MenuSection = () => {
                             </span>
                           )}
                         </div>
-                        <span className="text-wood-dark font-bold text-sm sm:text-base whitespace-nowrap flex-shrink-0 sm:self-start">
-                          {item.price}
-                        </span>
+                        {item.image && (
+                          <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-lg overflow-hidden shadow-md group-hover/item:shadow-lg transition-shadow duration-200">
+                            <Image
+                              src={item.image}
+                              alt={item.name}
+                              fill
+                              className="object-cover object-center group-hover/item:scale-105 transition-transform duration-200"
+                              sizes="80px"
+                              style={{ objectFit: 'cover' }}
+                            />
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
