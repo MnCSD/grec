@@ -24,7 +24,6 @@ export const en = {
     title: "Contact",
   },
   footer: {
-    copyright: "© 2024 Grec Restaurant. All rights reserved.",
+    copyright: "© 2025 Grec Restaurant. All rights reserved.",
   },
 };
-

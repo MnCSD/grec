@@ -24,7 +24,6 @@ export const gr = {
     title: "Επικοινωνία",
   },
   footer: {
-    copyright: "© 2024 Grec Restaurant. Όλα τα δικαιώματα διατηρούνται.",
+    copyright: "© 2025 Grec Restaurant. Όλα τα δικαιώματα διατηρούνται.",
   },
 };
-

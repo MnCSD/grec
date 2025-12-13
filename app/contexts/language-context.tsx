@@ -1,15 +1,23 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
 
-type Language = "en" | "gr";
+type Language = "en" | "gr" | "tr";
 
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
 }
 
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined
+);
 
 const STORAGE_KEY = "grec-language";
 
@@ -51,4 +59,3 @@ export const useLanguage = () => {
   }
   return context;
 };
-

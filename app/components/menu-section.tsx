@@ -3,8 +3,12 @@
 import { Lobster } from "next/font/google";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { menu } from "../dishes-en";
-import { drinksMenu } from "../drinks-en";
+import { menu as menuEn } from "../dishes-en";
+import { drinksMenu as drinksMenuEn } from "../drinks-en";
+import { drinksMenu as drinksMenuTr } from "../drinks-tr";
+import { drinksMenu as drinksMenuGr } from "../drinks-gr";
+import { menu as menuGr } from "../dishes-gr";
+import { menu as menuTr } from "../dishes-tr";
 import { useTranslation } from "../hooks/useTranslation";
 
 const lobster = Lobster({
@@ -13,8 +17,17 @@ const lobster = Lobster({
 });
 
 export const MenuSection = () => {
-  const { t } = useTranslation();
+  const { t, language } = useTranslation();
   const [isFlipped, setIsFlipped] = useState(false);
+
+  // Select menu based on language
+  const menu = language === "tr" ? menuTr : language === "gr" ? menuGr : menuEn;
+  const drinksMenu =
+    language === "tr"
+      ? drinksMenuTr
+      : language === "gr"
+        ? drinksMenuGr
+        : drinksMenuEn;
   const [selectedImage, setSelectedImage] = useState<{
     src: string;
     name: string;
@@ -61,7 +74,10 @@ export const MenuSection = () => {
           <div className="backface-hidden">
             <div className="columns-1 md:columns-2 gap-x-6 md:gap-x-12 py-6 sm:py-8 md:py-12 lg:py-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 w-full bg-white/40 rounded-sm backdrop-blur-sm relative h-auto md:h-[1200px] lg:h-[1500px] xl:h-[1800px] overflow-visible md:overflow-y-auto">
               {menu.map((dish) => (
-                <div key={dish.title} className="break-inside-avoid mb-6 sm:mb-8">
+                <div
+                  key={dish.title}
+                  className="break-inside-avoid mb-6 sm:mb-8"
+                >
                   <div className="mb-3 sm:mb-4">
                     <h2
                       className={`text-xl sm:text-2xl md:text-3xl font-bold text-logo capitalize ${lobster.className}`}
@@ -108,7 +124,9 @@ export const MenuSection = () => {
                                 >
                                   <path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
                                 </svg>
-                                <span className="hidden sm:inline">{t.common.view}</span>
+                                <span className="hidden sm:inline">
+                                  {t.common.view}
+                                </span>
                               </span>
                             )}
                           </div>
@@ -152,7 +170,10 @@ export const MenuSection = () => {
           <div className="absolute top-0 left-0 w-full backface-hidden [transform:rotateY(180deg)]">
             <div className="columns-1 md:columns-2 gap-x-6 md:gap-x-12 py-6 sm:py-8 md:py-12 lg:py-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 w-full bg-white/40 rounded-sm backdrop-blur-sm relative h-auto md:h-[1200px] lg:h-[1500px] xl:h-[1800px] overflow-visible md:overflow-y-auto">
               {drinksMenu.map((drink) => (
-                <div key={drink.title} className="break-inside-avoid mb-6 sm:mb-8">
+                <div
+                  key={drink.title}
+                  className="break-inside-avoid mb-6 sm:mb-8"
+                >
                   <div className="mb-3 sm:mb-4">
                     <h2
                       className={`text-xl sm:text-2xl md:text-3xl font-bold text-logo capitalize ${lobster.className}`}

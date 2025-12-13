@@ -6,7 +6,7 @@ import "flag-icons/css/flag-icons.min.css";
 import { useLanguage } from "../contexts/language-context";
 
 interface Option {
-  value: "en" | "gr";
+  value: "en" | "gr" | "tr";
   label: string;
   countryCode: string;
 }
@@ -21,6 +21,11 @@ const options: Option[] = [
     value: "gr",
     label: "Greek",
     countryCode: "GR",
+  },
+  {
+    value: "tr",
+    label: "Turkish",
+    countryCode: "TR",
   },
 ];
 
@@ -118,7 +123,8 @@ const CustomSingleValue = (props: any) => {
 export const LanguageSelection = () => {
   const { language, setLanguage } = useLanguage();
 
-  const selectedOption = options.find((opt) => opt.value === language) || options[0];
+  const selectedOption =
+    options.find((opt) => opt.value === language) || options[0];
 
   const handleChange = (option: Option | null) => {
     if (option) {
