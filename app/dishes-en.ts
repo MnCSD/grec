@@ -2,6 +2,7 @@ export interface MenuItem {
   name: string;
   description?: string;
   price: string;
+  image?: string;
 }
 
 export interface MenuCategory {
@@ -24,6 +25,7 @@ export const menu: MenuCategory[] = [
         description:
           "Tomatoes, cucumber, green onions, peppers, Cretan carob rusk, caper leaves, olives and extra virgin olive oil",
         price: "6.80 €",
+        image: "/assets/dishes/xoriatikh.png",
       },
       {
         name: "Cretan salad (Dakos)",
@@ -78,6 +80,7 @@ export const menu: MenuCategory[] = [
         description:
           "Wrapped with sesame in crispy phyllo dough topped with Greek thyme honey and sesame seeds",
         price: "4.80 €",
+        image: "/assets/dishes/feta_with_honey.png",
       },
       {
         name: "Talagani cheese",
