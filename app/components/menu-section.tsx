@@ -64,14 +64,14 @@ export const MenuSection = () => {
         {t.menu.title}
       </h1>
 
-      <div className="perspective-[2000px] w-full max-w-7xl px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 relative">
+      <div className="perspective-[2000px] w-full max-w-7xl px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 relative overflow-hidden">
         <div
           className={`relative transition-transform duration-1000 transform-style-3d ${
             isFlipped ? "[transform:rotateY(180deg)]" : ""
           }`}
         >
           {/* Front Side */}
-          <div className="backface-hidden">
+          <div className={`${isFlipped ? 'hidden md:block' : ''} backface-hidden`}>
             <div className="columns-1 md:columns-2 gap-x-6 md:gap-x-12 py-6 sm:py-8 md:py-12 lg:py-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 w-full bg-white/40 rounded-sm backdrop-blur-sm relative h-auto md:h-[1200px] lg:h-[1500px] xl:h-[1800px] overflow-visible md:overflow-y-auto">
               {menu.map((dish) => (
                 <div
@@ -167,7 +167,7 @@ export const MenuSection = () => {
           </div>
 
           {/* Back Side - Drinks Menu */}
-          <div className="absolute top-0 left-0 w-full backface-hidden [transform:rotateY(180deg)]">
+          <div className={`${isFlipped ? 'block md:absolute md:top-0 md:left-0' : 'hidden'} w-full backface-hidden [transform:rotateY(180deg)]`}>
             <div className="columns-1 md:columns-2 gap-x-6 md:gap-x-12 py-6 sm:py-8 md:py-12 lg:py-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 w-full bg-white/40 rounded-sm backdrop-blur-sm relative h-auto md:h-[1200px] lg:h-[1500px] xl:h-[1800px] overflow-visible md:overflow-y-auto">
               {drinksMenu.map((drink) => (
                 <div

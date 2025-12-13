@@ -1,4 +1,8 @@
 export const tr = {
+  site: {
+    title: "Grec - Yunan Yaratıcı Mutfağı",
+    description: "Modern bir dokunuşla otantik Yunan yemekleri",
+  },
   navbar: {
     menu: "Menü",
     about: "Hakkında",

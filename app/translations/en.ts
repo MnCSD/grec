@@ -1,4 +1,8 @@
 export const en = {
+  site: {
+    title: "Grec - Greek Creative Cuisine",
+    description: "Authentic Greek dishes with a modern twist",
+  },
   navbar: {
     menu: "Menu",
     about: "About",

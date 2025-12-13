@@ -1,4 +1,8 @@
 export const gr = {
+  site: {
+    title: "Grec - Ελληνική Δημιουργική Κουζίνα",
+    description: "Αυθεντικά ελληνικά πιάτα με μοντέρνα πινελιά",
+  },
   navbar: {
     menu: "Μενού",
     about: "Σχετικά",

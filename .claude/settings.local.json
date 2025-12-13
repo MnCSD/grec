@@ -3,7 +3,11 @@
     "allow": [
       "Bash(bun install:*)",
       "Bash(npm i:*)",
-      "WebFetch(domain:www.npmjs.com)"
+      "WebFetch(domain:www.npmjs.com)",
+      "Bash(vercel --version:*)",
+      "Bash(npm install:*)",
+      "Bash(vercel login)",
+      "Bash(vercel --yes:*)"
     ],
     "deny": [],
     "ask": []
