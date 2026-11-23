@@ -8,4 +8,4 @@ export const translations = {
   tr,
 };
 
-export type TranslationKey = keyof typeof en;
+export type { Translation } from "./en";

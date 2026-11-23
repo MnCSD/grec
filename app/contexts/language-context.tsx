@@ -5,10 +5,11 @@ import React, {
   useContext,
   useState,
   useEffect,
+  useCallback,
   ReactNode,
 } from "react";
 
-type Language = "en" | "gr" | "tr";
+export type Language = "en" | "gr" | "tr";
 
 interface LanguageContextType {
   language: Language;
@@ -20,30 +21,37 @@ const LanguageContext = createContext<LanguageContextType | undefined>(
 );
 
 const STORAGE_KEY = "grec-language";
+const HTML_LANG: Record<Language, string> = { en: "en", gr: "el", tr: "tr" };
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState<Language>("en");
-  const [isMounted, setIsMounted] = useState(false);
 
-  // Load language from localStorage on mount
+  // Read the saved choice after hydration (the server always renders English)
   useEffect(() => {
-    setIsMounted(true);
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored === "en" || stored === "gr") {
-      setLanguageState(stored);
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored === "en" || stored === "gr" || stored === "tr") {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- one-time sync from storage
+        setLanguageState(stored);
+      }
+    } catch {
+      /* storage unavailable */
     }
   }, []);
 
-  // Persist to localStorage when language changes
+  // Keep <html lang> in step for fonts, hyphenation and screen readers
   useEffect(() => {
-    if (isMounted) {
-      localStorage.setItem(STORAGE_KEY, language);
-    }
-  }, [language, isMounted]);
+    document.documentElement.lang = HTML_LANG[language];
+  }, [language]);
 
-  const setLanguage = (lang: Language) => {
+  const setLanguage = useCallback((lang: Language) => {
     setLanguageState(lang);
-  };
+    try {
+      localStorage.setItem(STORAGE_KEY, lang);
+    } catch {
+      /* storage unavailable */
+    }
+  }, []);
 
   return (
     <LanguageContext.Provider value={{ language, setLanguage }}>

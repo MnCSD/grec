@@ -1,295 +1,163 @@
 "use client";
 
-import { Lobster } from "next/font/google";
-import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { menu as menuEn } from "../dishes-en";
-import { drinksMenu as drinksMenuEn } from "../drinks-en";
-import { drinksMenu as drinksMenuTr } from "../drinks-tr";
-import { drinksMenu as drinksMenuGr } from "../drinks-gr";
-import { menu as menuGr } from "../dishes-gr";
-import { menu as menuTr } from "../dishes-tr";
+import { useRef, useState } from "react";
 import { useTranslation } from "../hooks/useTranslation";
+import { getMenu } from "../lib/menu-data";
+import { menuTitle } from "../lib/menu-titles";
+import { gsap, ScrollTrigger, useGSAP, prefersReducedMotion } from "../lib/gsap";
+import { useOpenDish } from "./dish-modal";
+import { Label, Lines } from "./ui";
+import { scrollToId } from "./smooth-scroll";
 
-const lobster = Lobster({
-  weight: "400",
-  subsets: ["latin"],
-});
+type Tab = "food" | "drinks";
+
+const Camera = () => (
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+    <path d="M3 8h3l2-3h8l2 3h3v11H3z" />
+    <circle cx="12" cy="13" r="3.5" />
+  </svg>
+);
 
 export const MenuSection = () => {
   const { t, language } = useTranslation();
-  const [isFlipped, setIsFlipped] = useState(false);
+  const openDish = useOpenDish();
+  const [tab, setTab] = useState<Tab>("food");
+  const [active, setActive] = useState(0);
+  const root = useRef<HTMLElement>(null);
+  const first = useRef(true);
+  const cats = getMenu(tab, language);
 
-  // Select menu based on language
-  const menu = language === "tr" ? menuTr : language === "gr" ? menuGr : menuEn;
-  const drinksMenu =
-    language === "tr"
-      ? drinksMenuTr
-      : language === "gr"
-        ? drinksMenuGr
-        : drinksMenuEn;
-  const [selectedImage, setSelectedImage] = useState<{
-    src: string;
-    name: string;
-    description?: string;
-  } | null>(null);
+  useGSAP(
+    () => {
+      // Scroll-spy: the list on the left follows the category on screen
+      const triggers = gsap.utils.toArray<HTMLElement>(".cat").map((el, i) =>
+        ScrollTrigger.create({
+          trigger: el,
+          start: "top 45%",
+          end: "bottom 45%",
+          onToggle: (self) => self.isActive && setActive(i),
+        })
+      );
+      setActive(0);
 
-  // Close modal on ESC key
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setSelectedImage(null);
+      // Switching Food / Drinks deals the categories in again
+      if (!first.current && !prefersReducedMotion()) {
+        gsap.from(".cat", { y: 36, autoAlpha: 0, duration: 0.8, stagger: 0.05, ease: "expo.out" });
+        gsap.from(".side a", { x: -16, autoAlpha: 0, duration: 0.6, stagger: 0.03, ease: "expo.out" });
       }
-    };
+      first.current = false;
+      ScrollTrigger.refresh();
+      return () => triggers.forEach((tr) => tr.kill());
+    },
+    { scope: root, dependencies: [tab, language] }
+  );
 
-    if (selectedImage) {
-      document.addEventListener("keydown", handleEscape);
-      document.body.style.overflow = "hidden";
-    }
-
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-      document.body.style.overflow = "unset";
-    };
-  }, [selectedImage]);
+  const tabs: { value: Tab; label: string }[] = [
+    { value: "food", label: t.menu.food },
+    { value: "drinks", label: t.menu.drinks },
+  ];
+  const idx = tab === "food" ? 0 : 1;
 
   return (
-    <div
-      id="menu"
-      className="text-black bg-sand flex flex-col items-center mt-10 sm:mt-20 pb-10 sm:pb-20 px-4 sm:px-6"
-    >
-      <h1
-        className={`text-5xl sm:text-7xl md:text-9xl lg:text-[150px] font-bold text-logo capitalize mb-8 sm:mb-12 lg:mb-16 ${lobster.className}`}
-      >
-        {t.menu.title}
-      </h1>
-
-      <div className="perspective-[2000px] w-full max-w-7xl px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 relative overflow-hidden">
-        <div
-          className={`relative transition-transform duration-1000 transform-style-3d ${
-            isFlipped ? "[transform:rotateY(180deg)]" : ""
-          }`}
-        >
-          {/* Front Side */}
-          <div className={`${isFlipped ? 'hidden md:block' : ''} backface-hidden`}>
-            <div className="columns-1 md:columns-2 gap-x-6 md:gap-x-12 py-6 sm:py-8 md:py-12 lg:py-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 w-full bg-white/40 rounded-sm backdrop-blur-sm relative h-auto md:h-[1200px] lg:h-[1500px] xl:h-[1800px] overflow-visible md:overflow-y-auto">
-              {menu.map((dish) => (
-                <div
-                  key={dish.title}
-                  className="break-inside-avoid mb-6 sm:mb-8"
-                >
-                  <div className="mb-3 sm:mb-4">
-                    <h2
-                      className={`text-xl sm:text-2xl md:text-3xl font-bold text-logo capitalize ${lobster.className}`}
-                    >
-                      {dish.title}
-                    </h2>
-                    <div className="w-16 sm:w-20 md:w-24 h-1 bg-brick mt-2 sm:mt-3 rounded-full"></div>
-                  </div>
-
-                  <div className="flex flex-col space-y-2 sm:space-y-3">
-                    {dish.items.map((item) => (
-                      <div
-                        key={item.name}
-                        className={`flex items-center gap-3 sm:gap-4 ${
-                          item.image
-                            ? "cursor-pointer group/item hover:bg-white/30 transition-all duration-200 rounded-lg p-2 -m-2"
-                            : ""
-                        }`}
-                        onClick={() => {
-                          if (item.image) {
-                            setSelectedImage({
-                              src: item.image,
-                              name: item.name,
-                              description: item.description,
-                            });
-                          }
-                        }}
-                      >
-                        <div className="flex flex-col flex-1 min-w-0">
-                          <div className="flex items-baseline gap-2 flex-wrap">
-                            <span className="text-wood-dark font-semibold text-sm sm:text-base leading-tight">
-                              {item.name}
-                            </span>
-                            <span className="text-wood-dark font-bold text-sm sm:text-base whitespace-nowrap">
-                              {item.price}
-                            </span>
-                          </div>
-                          {item.description && (
-                            <span className="text-wood-dark/70 font-light text-xs sm:text-sm leading-snug mt-0.5 sm:mt-1">
-                              {item.description}
-                            </span>
-                          )}
-                        </div>
-                        {item.image && (
-                          <div className="relative w-16 h-16 sm:w-20 sm:h-20 shrink-0 rounded-lg overflow-hidden shadow-md group-hover/item:shadow-lg transition-shadow duration-200">
-                            <Image
-                              src={item.image}
-                              alt={item.name}
-                              fill
-                              className="object-cover object-center group-hover/item:scale-105 transition-transform duration-200"
-                              sizes="80px"
-                              style={{ objectFit: 'cover' }}
-                            />
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-
-              {/* Page Curl - Front */}
-              <div
-                onClick={() => setIsFlipped(!isFlipped)}
-                className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 w-10 h-10 sm:w-12 sm:h-12 cursor-pointer group overflow-hidden z-10"
-                title={t.menu.title}
-              >
-                {/* Shadow under curl */}
-                <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[40px] sm:border-l-[48px] border-l-transparent border-b-[40px] sm:border-b-[48px] border-b-black/20" />
-
-                {/* Back of page (darker) */}
-                <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[38px] sm:border-l-[45px] border-l-transparent border-b-[38px] sm:border-b-[45px] border-b-wood-dark group-hover:border-b-wood transition-all duration-300" />
-
-                {/* Curl fold */}
-                <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[38px] sm:border-l-[45px] border-l-sand border-b-[38px] sm:border-b-[45px] border-b-transparent" />
-
-                {/* Highlight on curl */}
-                <div className="absolute bottom-1 right-1 w-0 h-0 border-l-[12px] sm:border-l-[15px] border-l-white/30 border-b-[12px] sm:border-b-[15px] border-b-transparent" />
-              </div>
-            </div>
+    <section className="menu" id="menu" ref={root}>
+      <div className="wrap">
+        <div className="menu-head">
+          <div>
+            <Label n="05">{t.menu.label}</Label>
+            <Lines className="h2" parts={t.menu.title} />
           </div>
+          <div className="seg seg--light" role="tablist" aria-label={t.menu.label} data-up="">
+            <span
+              className="knob"
+              aria-hidden="true"
+              style={{ width: "calc(50% - 6px)", transform: `translateX(${idx * 100}%)` }}
+            />
+            {tabs.map((tb) => (
+              <button
+                key={tb.value}
+                type="button"
+                role="tab"
+                aria-selected={tab === tb.value}
+                aria-controls="menu-list"
+                onClick={() => {
+                  setTab(tb.value);
+                  const top = document.getElementById("menu")?.getBoundingClientRect().top ?? 0;
+                  if (top < 0) scrollToId("menu");
+                }}
+              >
+                {tb.label}
+              </button>
+            ))}
+          </div>
+        </div>
 
-          {/* Back Side - Drinks Menu */}
-          <div className={`${isFlipped ? 'block md:absolute md:top-0 md:left-0' : 'hidden'} w-full backface-hidden [transform:rotateY(180deg)]`}>
-            <div className="columns-1 md:columns-2 gap-x-6 md:gap-x-12 py-6 sm:py-8 md:py-12 lg:py-16 px-4 sm:px-6 md:px-8 lg:px-12 xl:px-20 w-full bg-white/40 rounded-sm backdrop-blur-sm relative h-auto md:h-[1200px] lg:h-[1500px] xl:h-[1800px] overflow-visible md:overflow-y-auto">
-              {drinksMenu.map((drink) => (
-                <div
-                  key={drink.title}
-                  className="break-inside-avoid mb-6 sm:mb-8"
-                >
-                  <div className="mb-3 sm:mb-4">
-                    <h2
-                      className={`text-xl sm:text-2xl md:text-3xl font-bold text-logo capitalize ${lobster.className}`}
-                    >
-                      {drink.title}
-                    </h2>
-                    <div className="w-16 sm:w-20 md:w-24 h-1 bg-brick mt-2 sm:mt-3 rounded-full"></div>
-                  </div>
+        <div className="menu-body">
+          <nav className="side" aria-label={t.menu.sections}>
+            {cats.map((c, i) => (
+              <a key={c.title} href={`#cat-${tab}-${i}`} aria-current={active === i ? "true" : undefined}>
+                <span>{String(i + 1).padStart(2, "0")}</span>
+                {menuTitle(c.title)}
+              </a>
+            ))}
+          </nav>
 
-                  <div className="flex flex-col space-y-2 sm:space-y-3">
-                    {drink.items.map((item, index) => (
-                      <div
-                        key={index}
-                        className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 sm:gap-4"
-                      >
-                        <div className="flex flex-col flex-1 min-w-0">
-                          <span className="text-wood-dark font-semibold text-sm sm:text-base leading-tight break-words">
-                            {item.name}
-                          </span>
-                          {item.description && (
-                            <span className="text-wood-dark/70 font-light text-xs sm:text-sm leading-snug mt-0.5 sm:mt-1">
-                              {item.description}
+          <div className="cats" id="menu-list" role="tabpanel">
+            {cats.map((c, i) => (
+              <div className="cat" id={`cat-${tab}-${i}`} key={`${tab}-${c.title}`}>
+                <h3>
+                  <small>{String(i + 1).padStart(2, "0")}</small>
+                  {menuTitle(c.title)}
+                </h3>
+                {c.items.map((item, j) => {
+                  const body = (
+                    <>
+                      <span className="row-top">
+                        <span className="row-n">
+                          {item.name}
+                          {item.image && (
+                            <span className="cam" title={t.menu.hasPhoto}>
+                              <Camera />
                             </span>
                           )}
-                        </div>
-                        <span className="text-wood-dark font-bold text-sm sm:text-base whitespace-nowrap flex-shrink-0 sm:self-start">
-                          {item.price}
                         </span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              ))}
-
-              {/* Page Curl - Back */}
-              <div
-                onClick={() => setIsFlipped(!isFlipped)}
-                className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 w-10 h-10 sm:w-12 sm:h-12 cursor-pointer group overflow-hidden z-10"
-                title={t.menu.title}
-              >
-                {/* Shadow under curl */}
-                <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[40px] sm:border-l-[48px] border-l-transparent border-b-[40px] sm:border-b-[48px] border-b-black/20" />
-
-                {/* Back of page (darker) */}
-                <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[38px] sm:border-l-[45px] border-l-transparent border-b-[38px] sm:border-b-[45px] border-b-wood-dark group-hover:border-b-wood transition-all duration-300" />
-
-                {/* Curl fold */}
-                <div className="absolute bottom-0 right-0 w-0 h-0 border-l-[38px] sm:border-l-[45px] border-l-sand border-b-[38px] sm:border-b-[45px] border-b-transparent" />
-
-                {/* Highlight on curl */}
-                <div className="absolute bottom-1 right-1 w-0 h-0 border-l-[12px] sm:border-l-[15px] border-l-white/30 border-b-[12px] sm:border-b-[15px] border-b-transparent" />
+                        <span className="row-p">{item.price}</span>
+                      </span>
+                      {item.description && <span className="row-d">{item.description}</span>}
+                    </>
+                  );
+                  return item.image ? (
+                    <button
+                      type="button"
+                      className="row"
+                      key={j}
+                      aria-label={`${item.name}, ${item.price}. ${t.menu.hasPhoto}`}
+                      onClick={() =>
+                        openDish({
+                          src: item.image!,
+                          name: item.name,
+                          description: item.description,
+                          price: item.price,
+                          category: menuTitle(c.title),
+                        })
+                      }
+                    >
+                      {body}
+                      <span className="peek" aria-hidden="true">
+                        <Image src={item.image} alt="" fill sizes="150px" style={{ objectFit: "cover" }} />
+                      </span>
+                    </button>
+                  ) : (
+                    <div className="row" key={j}>
+                      {body}
+                    </div>
+                  );
+                })}
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
-
-      {/* Image Modal/Popup */}
-      {selectedImage && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm animate-fade-in"
-          onClick={() => setSelectedImage(null)}
-        >
-          <div
-            className="relative max-w-4xl w-full max-h-[95vh] sm:max-h-[90vh] bg-white rounded-lg sm:rounded-lg shadow-2xl overflow-hidden animate-modal-in"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Image Container */}
-            <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-[70vh] bg-gradient-to-br from-sand to-stone-light overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent z-[1]"></div>
-              <div className="animate-image-in w-full h-full relative">
-                <Image
-                  src={selectedImage.src}
-                  alt={selectedImage.name}
-                  fill
-                  className="object-cover object-center"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 1200px"
-                  priority
-                  quality={95}
-                />
-              </div>
-            </div>
-
-            {/* Close Button */}
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setSelectedImage(null);
-              }}
-              className="absolute top-2 right-2 sm:top-4 sm:right-4 z-50 w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center bg-white/90 hover:bg-white rounded-full shadow-lg transition-all duration-200 hover:scale-110 hover:rotate-90 group cursor-pointer"
-              aria-label={t.common.close}
-              type="button"
-            >
-              <svg
-                className="w-5 h-5 sm:w-6 sm:h-6 text-wood-dark group-hover:text-brick transition-colors duration-200 pointer-events-none"
-                fill="none"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path d="M6 18L18 6M6 6l12 12"></path>
-              </svg>
-            </button>
-
-            {/* Image Info */}
-            <div className="bg-white p-4 sm:p-6 border-t-4 border-brick">
-              <h3
-                className={`text-xl sm:text-2xl md:text-3xl font-bold text-logo mb-2 animate-text-in-1 ${lobster.className}`}
-              >
-                {selectedImage.name}
-              </h3>
-              {selectedImage.description && (
-                <p className="text-wood-dark/80 text-sm sm:text-base leading-relaxed animate-text-in-2">
-                  {selectedImage.description}
-                </p>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
+    </section>
   );
 };

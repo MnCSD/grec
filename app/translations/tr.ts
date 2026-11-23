@@ -1,33 +1,108 @@
-export const tr = {
+import type { Translation } from "./en";
+
+export const tr: Translation = {
   site: {
-    title: "Grec - Yunan Yaratıcı Mutfağı",
-    description: "Modern bir dokunuşla otantik Yunan yemekleri",
+    title: "Grec · Ladadika'da yaratıcı Yunan mutfağı ve canlı müzik",
+    description:
+      "Aigyptou 21, Ladadika, Selanik'te mezeler, fıçı şarabı ve canlı rebetiko.",
   },
   navbar: {
     menu: "Menü",
-    about: "Hakkında",
-    contact: "İletişim",
+    music: "Canlı müzik",
+    story: "Hikâyemiz",
+    visit: "Ziyaret",
+    cta: "Menüyü gör",
     language: "Dil",
+    openMenu: "Menüyü aç",
+    closeMenu: "Menüyü kapat",
+    home: "Grec, başa dön",
   },
   hero: {
-    welcomeTo: "Hoş geldiniz",
-    viewMenu: "menüyü görüntüle",
+    eyebrow: "Canlı Yunan müziği",
+    title: ["Yaratıcı", "Yunan", "mutfağı."],
+    lead: "Bahçeden, karadan ve denizden mezeler, fıçıdan şarap ve Arnavut kaldırımında masalar.",
+    cta: "Menüyü gör",
+    secondary: "Tavernayı bulun",
+    scroll: "Kaydır",
+    photoAlt: "Grec'in Ladadika'da Arnavut kaldırımlı sokaktaki masaları",
+  },
+  marquee: [
+    "Meze",
+    "Canlı rebetiko",
+    "Fıçı şarabı",
+    "Tsipuro",
+    "Laiko & muhabbet",
+    "Denizden",
+    "Μουσική ταβέρνα",
+  ],
+  story: {
+    label: "Hikâyemiz",
+    statement:
+      "Ezbere bildiğimiz Yunan tarifleri, her birine yeni bir fikir. Kekik balıyla yufkaya sarılmış beyaz peynir. Kendi bahçemizden salatalar. Fıçıdan şarap, karafla tsipuro ve gecenin ritmini belirleyen müzik.",
+    roomLabel: "İçeride ve dışarıda",
+    room: "İçeride badanalı tuğla, nane yeşili sandalyeler ve tablolarla dolu bir duvar. Akşam sıcak olunca masalar sokağa çıkar.",
+    roomLink: "Gelin, bizimle oturun",
+    roomAlt: "Salon: badanalı tuğla, boyalı sandalyeler ve tablolarla dolu bir duvar",
+  },
+  music: {
+    label: "Canlı müzik",
+    title: ["Masadaki", "sesler"],
+    lead: "Buzuki, gitar ve ses, tabağınızdan birkaç adım ötede.",
+    roles: { bouzouki: "Buzuki", vocals: "Vokal", guitar: "Gitar" },
+  },
+  sessions: {
+    label: "Canlı kayıtlar",
+    title: ["Salonu", "dinleyin"],
+    note: "Türkçe seçildiğinde Yunanca ve Türkçe setler yan yana çalar.",
+    tabs: "Video dili",
+    playing: "Çalıyor",
+    paused: "Duraklatıldı",
+    play: "Videoyu oynat",
+    pause: "Videoyu duraklat",
+    mute: "Sesi kapat",
+    unmute: "Sesi aç",
+    videos: {
+      en: "A live set, sung in English",
+      gr: "Ρεμπέτικα και λαϊκά",
+      tr: "Muhabbet, canlı",
+    },
+  },
+  kitchen: {
+    label: "Mutfaktan",
+    title: ["Başlamak için", "iki", "tabak"],
+    lead: "Her şey paylaşmak için. Birkaç tabak söyleyin, masada elden ele dolaştırın.",
+    link: "Tüm menü",
+    view: "Bak",
   },
   menu: {
-    title: "Menü",
+    label: "Menü",
+    title: ["Ye, iç,", "kal"],
+    food: "Yemek",
+    drinks: "İçecekler",
+    sections: "Menü bölümleri",
+    hasPhoto: "Fotoğrafı gör",
+  },
+  visit: {
+    label: "Ziyaret",
+    title: ["Bir sandalye", "çekin."],
+    lead: "Akşam sıcakken sokakta, değilse içeride tabloların altında.",
+    address: "Adres",
+    hours: "Saatler",
+    phone: "Telefon",
+    instagram: "Instagram",
+    directions: "Yol tarifi",
+    photoAlt: "Grec'in boyalı tabelası ve içerideki bar",
+  },
+  footer: {
+    tag: "Ladadika'da yaratıcı Yunan mutfağı ve canlı müzik.",
+    explore: "Keşfet",
+    language: "Dil",
+    follow: "Bizi bulun",
+    top: "Başa dön",
+    allergies: "Alerjiniz mi var? Sipariş vermeden önce bize sorun.",
   },
   common: {
     close: "Kapat",
     view: "Görüntüle",
-  },
-  // Placeholders for future sections
-  about: {
-    title: "Hakkında",
-  },
-  contact: {
-    title: "İletişim",
-  },
-  footer: {
-    copyright: "© 2025 Grec Restaurant. Tüm hakları saklıdır.",
   },
 };

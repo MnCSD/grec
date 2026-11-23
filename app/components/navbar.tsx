@@ -1,191 +1,137 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import React, { useState, useEffect } from "react";
-import { LanguageSelection } from "./language-selection";
+import { useEffect, useState } from "react";
 import { useTranslation } from "../hooks/useTranslation";
+import { useLanguage, type Language } from "../contexts/language-context";
+import { ButtonArrow } from "./ui";
+import { lockScroll } from "./smooth-scroll";
+
+const LANGS: { value: Language; short: string; long: string }[] = [
+  { value: "en", short: "EN", long: "English" },
+  { value: "gr", short: "ΕΛ", long: "Ελληνικά" },
+  { value: "tr", short: "TR", long: "Türkçe" },
+];
+
+export const LanguageSwitch = () => {
+  const { language, setLanguage } = useLanguage();
+  const { t } = useTranslation();
+  return (
+    <div className="lang" role="group" aria-label={t.navbar.language}>
+      {LANGS.map((l) => (
+        <button
+          key={l.value}
+          type="button"
+          lang={l.value === "gr" ? "el" : l.value}
+          aria-label={l.long}
+          aria-pressed={language === l.value}
+          onClick={() => setLanguage(l.value)}
+        >
+          {l.short}
+        </button>
+      ))}
+    </div>
+  );
+};
 
 export const Navbar = () => {
   const { t } = useTranslation();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
 
-  // Prevent body scroll when menu is open
+  // Border once the page moves; hide while reading down, show again on the way up
   useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
-    }
+    let last = window.scrollY;
+    const onScroll = () => {
+      const y = window.scrollY;
+      setScrolled(y > 8);
+      setHidden(y > 400 && y > last + 2);
+      if (y < last - 2) setHidden(false);
+      last = y;
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
+  useEffect(() => {
+    lockScroll(open);
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    document.addEventListener("keydown", onKey);
     return () => {
-      document.body.style.overflow = "unset";
+      document.removeEventListener("keydown", onKey);
+      if (open) lockScroll(false);
     };
-  }, [isMenuOpen]);
+  }, [open]);
 
-  // Close menu on ESC key
-  useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isMenuOpen) {
-        setIsMenuOpen(false);
-      }
-    };
-
-    document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, [isMenuOpen]);
-
-  const handleLinkClick = () => {
-    setIsMenuOpen(false);
-  };
+  const links = [
+    { href: "#menu", label: t.navbar.menu },
+    { href: "#music", label: t.navbar.music },
+    { href: "#story", label: t.navbar.story },
+    { href: "#visit", label: t.navbar.visit },
+  ];
 
   return (
     <>
-      <div className="grid grid-cols-3 items-center h-14 sm:h-16 px-4 sm:px-6 md:px-8 lg:px-10 relative z-50">
-        {/* Left Section - Mobile: Hamburger, Desktop: Navigation */}
-        <div className="flex items-center justify-start">
-          {/* Hamburger Menu Button - Mobile Only */}
-          <button
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            className="sm:hidden w-8 h-8 flex flex-col justify-center items-center gap-1.5 z-50 relative"
-            aria-label="Toggle menu"
-            aria-expanded={isMenuOpen}
-          >
-            <span
-              className={`w-6 h-0.5 bg-olive transition-all duration-300 ${
-                isMenuOpen ? "rotate-45 translate-y-2" : ""
-              }`}
-            />
-            <span
-              className={`w-6 h-0.5 bg-olive transition-all duration-300 ${
-                isMenuOpen ? "opacity-0" : ""
-              }`}
-            />
-            <span
-              className={`w-6 h-0.5 bg-olive transition-all duration-300 ${
-                isMenuOpen ? "-rotate-45 -translate-y-2" : ""
-              }`}
-            />
-          </button>
-
-          {/* Desktop Navigation - Left */}
-          <div className="hidden sm:flex items-center gap-2 sm:gap-3 md:gap-4">
-            <Link
-              href="#menu"
-              className="text-olive text-xs sm:text-sm md:text-[14px] font-medium whitespace-nowrap hover:opacity-70 transition-opacity"
-            >
-              {t.navbar.menu}
-            </Link>
-            <span className="text-olive font-bold opacity-30">·</span>
-            <Link
-              href="#about"
-              className="text-olive text-xs sm:text-sm md:text-[14px] font-medium whitespace-nowrap hover:opacity-70 transition-opacity"
-            >
-              {t.navbar.about}
-            </Link>
-          </div>
-        </div>
-
-        {/* Center Section - Logo (Always Centered) */}
-        <div className="flex items-center justify-center">
-          <div className="mt-2 sm:mt-4">
-            <Image
-              src={"/assets/grec_logo.png"}
-              alt="Logo"
-              width={100}
-              height={40}
-              className="w-16 h-auto sm:w-20 md:w-24 lg:w-[100px]"
-            />
-          </div>
-        </div>
-
-        {/* Right Section - Mobile: Language, Desktop: Navigation */}
-        <div className="flex items-center justify-end">
-          {/* Desktop Navigation - Right */}
-          <div className="hidden sm:flex items-center gap-2 sm:gap-3 md:gap-4">
-            <Link
-              href="#contact"
-              className="text-olive text-xs sm:text-sm md:text-[14px] font-medium whitespace-nowrap hover:opacity-70 transition-opacity"
-            >
-              {t.navbar.contact}
-            </Link>
-            <span className="text-olive font-bold opacity-30">·</span>
-            <LanguageSelection />
-          </div>
-
-          {/* Language Selection - Mobile Only (when menu is closed) */}
-          {!isMenuOpen && (
-            <div className="sm:hidden">
-              <LanguageSelection />
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Mobile Menu Overlay */}
-      <div
-        className={`fixed inset-0 z-40 sm:hidden transition-opacity duration-300 ${
-          isMenuOpen
-            ? "opacity-100 pointer-events-auto"
-            : "opacity-0 pointer-events-none"
-        }`}
-        onClick={() => setIsMenuOpen(false)}
+      <a className="skip" href="#main">
+        Skip to content
+      </a>
+      <header
+        className={`nav ${scrolled ? "is-scrolled" : ""} ${hidden && !open ? "is-hidden" : ""}`}
       >
-        {/* Backdrop */}
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" />
-      </div>
-
-      {/* Mobile Menu Drawer */}
-      <div
-        className={`fixed top-0 left-0 h-full w-80 max-w-[85vw] bg-sand z-50 sm:hidden transform transition-transform duration-300 ease-out shadow-2xl ${
-          isMenuOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-      >
-        <div className="flex flex-col h-full pt-6 sm:pt-20 px-6">
-          {/* Logo */}
-          <div className="flex justify-center mb-8 pb-6 border-b border-olive/20">
-            <Image
-              src={"/assets/grec_logo.png"}
-              alt="Logo"
-              width={100}
-              height={40}
-              className="w-24 h-auto"
-            />
-          </div>
-
-          {/* Menu Items */}
-          <nav className="flex flex-col gap-6">
-            <Link
-              href="#menu"
-              onClick={handleLinkClick}
-              className="text-olive text-xl font-medium py-3 border-b border-olive/20 hover:text-brick transition-colors duration-200 transform hover:translate-x-2"
-            >
-              {t.navbar.menu}
-            </Link>
-            <Link
-              href="#about"
-              onClick={handleLinkClick}
-              className="text-olive text-xl font-medium py-3 border-b border-olive/20 hover:text-brick transition-colors duration-200 transform hover:translate-x-2"
-            >
-              {t.navbar.about}
-            </Link>
-            <Link
-              href="#contact"
-              onClick={handleLinkClick}
-              className="text-olive text-xl font-medium py-3 border-b border-olive/20 hover:text-brick transition-colors duration-200 transform hover:translate-x-2"
-            >
-              {t.navbar.contact}
-            </Link>
+        <div className="wrap">
+          <nav className="nav-l" aria-label="Main">
+            {links.map((l) => (
+              <a key={l.href} className="ul" href={l.href}>
+                {l.label}
+              </a>
+            ))}
           </nav>
-
-          {/* Language Selection in Menu */}
-          <div className="mt-8 pt-6">
-            <div className="text-olive/70 text-sm mb-3">
-              {t.navbar.language}
-            </div>
-            <LanguageSelection />
+          <a className="nav-c" href="#top" aria-label={t.navbar.home}>
+            <Image
+              className="logo"
+              src="/assets/grec_logo.png"
+              alt="Grec, Ελληνική Δημιουργική Κουζίνα"
+              width={187}
+              height={132}
+              priority
+            />
+          </a>
+          <div className="nav-r">
+            <LanguageSwitch />
+            <a className="btn" href="#menu">
+              {t.navbar.cta}
+              <ButtonArrow />
+            </a>
+            <button
+              type="button"
+              className="burger"
+              aria-label={open ? t.navbar.closeMenu : t.navbar.openMenu}
+              aria-expanded={open}
+              aria-controls="sheet"
+              onClick={() => setOpen((o) => !o)}
+            >
+              <span className="bars" aria-hidden="true">
+                <span />
+                <span />
+              </span>
+            </button>
           </div>
         </div>
+      </header>
+
+      <div id="sheet" className={`sheet ${open ? "open" : ""}`} aria-hidden={!open} inert={!open}>
+        {links.map((l) => (
+          <a key={l.href} className="big" href={l.href} onClick={() => setOpen(false)}>
+            {l.label}
+          </a>
+        ))}
+        <LanguageSwitch />
+        <a className="btn" href="#menu" onClick={() => setOpen(false)}>
+          {t.navbar.cta}
+          <ButtonArrow />
+        </a>
       </div>
     </>
   );

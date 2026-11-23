@@ -1,22 +1,31 @@
-import type { Metadata } from "next";
-import { Arsenal } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+// Self-hosted fonts: both carry Greek and Turkish letters (the old Arsenal face
+// had no Greek), and the build needs no network.
+import "@fontsource-variable/noto-serif-display/wght.css";
+import "@fontsource-variable/noto-serif-display/wght-italic.css";
+import "@fontsource-variable/manrope/wght.css";
 import "./globals.css";
 import { Providers } from "./providers";
 
-const arsenal = Arsenal({
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
-  subsets: ["latin"],
-  variable: "--font-arsenal",
-});
-
 export const metadata: Metadata = {
-  title: "Grec - Ελληνική Δημιουργική Κουζίνα",
-  description: "Grec - Greek Creative Cuisine. Authentic Greek dishes with a modern twist.",
+  title: "Grec · Creative Greek cuisine and live music in Ladadika",
+  description:
+    "Meze, wine from the barrel and live rebetiko at Aigyptou 21, Ladadika, Thessaloniki.",
   icons: {
     icon: "/assets/grec_logo.png",
     apple: "/assets/grec_logo.png",
   },
+  openGraph: {
+    title: "Grec · Creative Greek cuisine and live music",
+    description:
+      "Meze, wine from the barrel and live rebetiko at Aigyptou 21, Ladadika, Thessaloniki.",
+    images: ["/assets/road_grec.jpg"],
+    type: "website",
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#f5f2ec",
 };
 
 export default function RootLayout({
@@ -26,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${arsenal.variable} antialiased overflow-x-hidden`}>
+      <body>
         <Providers>{children}</Providers>
       </body>
     </html>
